@@ -1,27 +1,44 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+
+from Controllers.TaskController import TaskController
 
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
     return "<h2>Tasks App</h2>"
 
+
 @app.route("/tasks/")
-def tasks_list():
-    return []
+def task_list():
+    task_list = TaskController.get_all_tasks()
+    return task_list
 
-@app.route("/tasks/<int:task_id>", methods = ['GET', 'PATCH'])
-def get_task():
-    return {}
 
-@app.route("/tasks/add", methods = ['POST'])
+@app.route("/tasks/<int:task_id>", methods=['GET', 'PATCH'])
+def get_task(task_id):
+    task = TaskController.get_task_by_id(task_id)
+    return jsonify(task)
+
+
+@app.route("/tasks/add", methods=['POST'])
 def add_task():
-    return "<p>Hello, World!</p>"
+    name = request.form['name']
+    description = request.form['description']
+    task = TaskController.add_task(name, description)
+    return jsonify(task)
 
-@app.route("/task/update", methods = ['PUT', 'PATCH'])
-def update_task():
-    return "<p>Hello, World!</p>"
 
-@app.route("/task/<int:task_id>", methods = ['DELETE'])
-def delete_task():
-    return "<p>Hello, World!</p>"
+@app.route("/tasks/<int:task_id>", methods=['PUT', 'PATCH'])
+def update_task(task_id):
+    name = request.form['name']
+    description = request.form['description']
+    task = TaskController.update_task(task_id, name, description)
+    return jsonify(task)
+
+
+@app.route("/tasks/<int:task_id>", methods=['DELETE'])
+def delete_task(task_id):
+    task = TaskController.delete_task(task_id)
+    return jsonify(task)

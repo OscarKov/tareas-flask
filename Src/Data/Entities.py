@@ -1,18 +1,21 @@
-from typing import List
+from dataclasses import dataclass
 from typing import Optional
-from sqlalchemy import ForeignKey
-from sqlalchemy import String
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
-from sqlalchemy.orm import relationship
+
 
 class Base(DeclarativeBase):
     pass
 
+
+@dataclass
 class Task(Base):
     __tablename__ = "task"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str]
     description: Mapped[Optional[str]]
+
+    def __repr__(self) -> str:
+        return f"Task(id={self.id!r}, name={self.name}, description={self.description})"

@@ -4,6 +4,7 @@ from Controllers.TaskController import TaskController
 
 app = Flask(__name__)
 
+taskController = TaskController()
 
 @app.route("/")
 def index():
@@ -12,13 +13,13 @@ def index():
 
 @app.route("/tasks/")
 def task_list():
-    task_list = TaskController.get_all_tasks()
+    task_list = taskController.get_all_tasks()
     return task_list
 
 
 @app.route("/tasks/<int:task_id>", methods=['GET', 'PATCH'])
 def get_task(task_id):
-    task = TaskController.get_task_by_id(task_id)
+    task = taskController.get_task_by_id(task_id)
     return jsonify(task)
 
 
@@ -26,7 +27,7 @@ def get_task(task_id):
 def add_task():
     name = request.form['name']
     description = request.form['description']
-    task = TaskController.add_task(name, description)
+    task = taskController.add_task(name, description)
     return jsonify(task)
 
 
@@ -34,11 +35,11 @@ def add_task():
 def update_task(task_id):
     name = request.form['name']
     description = request.form['description']
-    task = TaskController.update_task(task_id, name, description)
+    task = taskController.update_task(task_id, name, description)
     return jsonify(task)
 
 
 @app.route("/tasks/<int:task_id>", methods=['DELETE'])
 def delete_task(task_id):
-    task = TaskController.delete_task(task_id)
+    task = taskController.delete_task(task_id)
     return jsonify(task)
